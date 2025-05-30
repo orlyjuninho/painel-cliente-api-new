@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: painel-cliente-api-gz-2
+    env: node
+    buildCommand: |
+      npm install
+      npm run prisma:generate
+      npm run build
+      ls -la dist/
+    startCommand: node dist/app.js
+    nodeVersion: "18.x"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: painel-cliente-db-gz-2
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_REGION
+        value: us-east-1
+      - key: AWS_BUCKET_NAME
+        sync: false
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"
+
+databases:
+  - name: painel-cliente-db-gz-2
+    databaseName: painel-cliente
+    user: painelclientegz2 
